@@ -26,4 +26,4 @@ if st.button("BMI 계산하기"):
             st.error("비만입니다. 건강 관리가 필요합니다.")
     else:
         st.warning("키와 몸무게를 모두 입력해주세요.")
-    
+        
