@@ -3,23 +3,41 @@
 import streamlit as st
 import random
 
-st.title("🎯 숫자 맞히기 게임")
+st.title("🧮 수학 퀴즈 게임")
 
-# 세션 상태로 정답 저장
-if "answer" not in st.session_state:
-    st.session_state.answer = random.randint(1, 100)
+# 세션 상태 초기화
+if "num1" not in st.session_state:
+    st.session_state.num1 = random.randint(1, 20)
+    st.session_state.num2 = random.randint(1, 20)
+    st.session_state.op = random.choice(["+", "-", "*"])
 
-# 사용자 입력
-guess = st.number_input("1부터 100 사이의 숫자를 입력하세요", min_value=1, max_value=100, step=1)
+# 문제 생성
+num1 = st.session_state.num1
+num2 = st.session_state.num2
+op = st.session_state.op
 
-# 버튼 클릭 시 결과 출력
-if st.button("확인"):
-    if guess < st.session_state.answer:
-        st.info("너무 낮아요! 더 큰 숫자를 입력해보세요.")
-    elif guess > st.session_state.answer:
-        st.warning("너무 높아요! 더 작은 숫자를 입력해보세요.")
-    else:
+# 정답 계산
+if op == "+":
+    answer = num1 + num2
+elif op == "-":
+    answer = num1 - num2
+else:
+    answer = num1 * num2
+
+# 문제 출력
+st.subheader(f"문제: {num1} {op} {num2} = ?")
+user_answer = st.number_input("당신의 답을 입력하세요", step=1)
+
+# 버튼 클릭 시 결과 확인
+if st.button("정답 확인"):
+    if user_answer == answer:
         st.success("정답입니다! 🎉")
-        # 게임 리셋
-        st.session_state.answer = random.randint(1, 100)
         st.balloons()
+    else:
+        st.error(f"틀렸어요 😢 정답은 {answer}입니다.")
+
+    # 다음 문제로 초기화
+    st.session_state.num1 = random.randint(1, 20)
+    st.session_state.num2 = random.randint(1, 20)
+    st.session_state.op = random.choice(["+", "-", "*"])
+    
